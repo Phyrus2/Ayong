@@ -1,0 +1,1138 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>For You ❤️</title>
+
+    <style>
+      body {
+        margin: 0;
+        background: black;
+        font-family: "Poppins", sans-serif;
+        overflow: hidden;
+        color: white;
+      }
+
+      /* 🌫️ OVERLAY CINEMATIC */
+      #cinematicOverlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5); /* cukup gelapin aja */
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 1.5s ease;
+        z-index: 1;
+      }
+
+      #grain {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 7;
+        opacity: 0.15;
+        background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+        mix-blend-mode: overlay;
+      }
+
+      /* ✨ TEXT CINEMATIC */
+      #text {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 1s ease;
+      }
+
+      #text.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* 🎥 CAMERA PAN */
+      @keyframes cameraPan {
+        0% {
+          transform: translateX(-2%) scale(1.02);
+        }
+        50% {
+          transform: translateX(2%) scale(1.03);
+        }
+        100% {
+          transform: translateX(-2%) scale(1.02);
+        }
+      }
+
+      #photoAlbum {
+        animation: cameraPan 20s ease-in-out infinite;
+      }
+
+      #lightLeak {
+        position: fixed;
+        top: 0;
+        left: -50%;
+        width: 200%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 6;
+        background: linear-gradient(
+          120deg,
+          transparent 0%,
+          rgba(255, 100, 150, 0.2) 20%,
+          rgba(255, 200, 100, 0.25) 40%,
+          transparent 60%
+        );
+        mix-blend-mode: screen;
+        opacity: 0;
+        animation: leakMove 12s linear infinite;
+      }
+
+      @keyframes leakMove {
+        0% {
+          transform: translateX(-20%);
+          opacity: 0;
+        }
+        20% {
+          opacity: 0.6;
+        }
+        50% {
+          opacity: 0.3;
+        }
+        80% {
+          opacity: 0.6;
+        }
+        100% {
+          transform: translateX(20%);
+          opacity: 0;
+        }
+      }
+
+      /* 🎬 FLOATING ANIMATION */
+      @keyframes floatSlow {
+        0% {
+          transform: translateY(0px) rotate(var(--rotate));
+        }
+        50% {
+          transform: translateY(-15px) rotate(calc(var(--rotate) + 1deg));
+        }
+        100% {
+          transform: translateY(0px) rotate(var(--rotate));
+        }
+      }
+
+      .album-item.floating {
+        animation: floatSlow 6s ease-in-out infinite;
+      }
+
+      /* 🎬 VIGNETTE (gelap pinggir) */
+      #vignette {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 5;
+        background: radial-gradient(
+          circle,
+          transparent 60%,
+          rgba(0, 0, 0, 0.7) 100%
+        );
+      }
+
+      /* 🎬 CAMERA BREATH */
+      #photoAlbum {
+        animation: cameraBreath 8s ease-in-out infinite;
+      }
+
+      @keyframes cameraBreath {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.02);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      /* 🎁 GIFT */
+      #giftScreen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1001;
+      }
+
+      .tulip {
+        position: absolute;
+        pointer-events: none;
+        opacity: 0;
+        animation: floatUp linear forwards;
+        z-index: 3;
+        will-change: transform;
+      }
+
+      /* DEPTH LAYERS */
+      .tulip.front {
+        filter: drop-shadow(0 0 10px #ff66cc) drop-shadow(0 0 20px #ff66cc);
+        opacity: 0.95;
+      }
+
+      .tulip.mid {
+        opacity: 0.7;
+      }
+
+      .tulip.back {
+        filter: blur(3px);
+        opacity: 0.35;
+      }
+
+      .album-item {
+        position: absolute;
+        border-radius: 15px;
+        opacity: 0;
+        transition: all 1.5s ease;
+        backdrop-filter: blur(2px);
+      }
+
+      .album-item:hover {
+        transform: scale(1.1) rotate(0deg) !important;
+        z-index: 30;
+      }
+
+      /* 🌷 EXPLOSION */
+      .tulip-explode {
+        position: absolute;
+        font-size: 30px;
+        pointer-events: none;
+        animation: explode 1.8s ease-out forwards;
+        z-index: 5;
+      }
+
+      @keyframes explode {
+        0% {
+          transform: translate(0, 0) scale(0.3);
+          opacity: 0;
+        }
+        30% {
+          opacity: 1;
+        }
+        100% {
+          transform: translate(var(--x), var(--y)) scale(1.2);
+          opacity: 0;
+        }
+      }
+
+      /* FLOAT + WIND EFFECT */
+      @keyframes floatUp {
+        0% {
+          transform: translateY(110vh) translateX(0) scale(0.6) rotate(0deg);
+          opacity: 0;
+        }
+        10% {
+          opacity: 1;
+        }
+        50% {
+          transform: translateY(40vh) translateX(30px) scale(1) rotate(10deg);
+        }
+        100% {
+          transform: translateY(-10vh) translateX(-40px) scale(1.2)
+            rotate(-10deg);
+          opacity: 0;
+        }
+      }
+
+      .gift-box {
+        position: relative;
+        width: 120px;
+        height: 120px;
+        cursor: pointer;
+      }
+
+      .box {
+        width: 100%;
+        height: 100%;
+        background: #ff66cc;
+        border-radius: 10px;
+      }
+
+      .lid {
+        position: absolute;
+        width: 120px;
+        height: 30px;
+        background: #ff3399;
+        top: -25px;
+        border-radius: 10px;
+        transform-origin: left;
+        transition: 0.8s;
+      }
+
+      .gift-box.open .lid {
+        transform: rotate(-120deg);
+      }
+
+      /* 🌷 FLOWER */
+      .flower {
+        position: absolute;
+        font-size: 24px;
+        animation: bloom 2s forwards;
+      }
+
+      @keyframes bloom {
+        0% {
+          transform: translateY(0) scale(0.3);
+          opacity: 0;
+        }
+        50% {
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-200px) scale(1.2);
+          opacity: 0;
+        }
+      }
+
+      /* 🌌 STARFIELD */
+      canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 0;
+      }
+
+      /* CONTAINER */
+      .container {
+        position: relative;
+        z-index: 2;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        text-align: center;
+      }
+
+      h1 {
+        color: #ff66cc;
+      }
+
+      /* CARD */
+      .card {
+        background: rgba(255, 102, 204, 0.1);
+        border: 1px solid rgba(255, 102, 204, 0.3);
+        padding: 15px 25px;
+        margin: 10px;
+        border-radius: 15px;
+        cursor: pointer;
+      }
+
+      /* 🌷 TULIP */
+      .tulip {
+        position: absolute;
+        pointer-events: none;
+        opacity: 0;
+        font-size: 30px;
+        animation: float 12s linear infinite;
+        z-index: 3;
+      }
+
+      .tulip.front {
+        filter: drop-shadow(0 0 10px #ff66cc);
+        opacity: 0.9;
+      }
+
+      .tulip.back {
+        filter: blur(2px);
+        opacity: 0.4;
+      }
+
+      @keyframes float {
+        0% {
+          transform: translateY(100vh);
+          opacity: 0;
+        }
+        10% {
+          opacity: 0.7;
+        }
+        100% {
+          transform: translateY(-10vh);
+          opacity: 0;
+        }
+      }
+
+      /* 💖 HEART */
+      .heart {
+        position: absolute;
+        color: #ff4da6;
+        animation: rise 3s linear forwards;
+      }
+
+      @keyframes rise {
+        to {
+          transform: translateY(-200px);
+          opacity: 0;
+        }
+      }
+
+      #photoAlbum {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 10;
+      }
+
+      .album-item {
+        position: absolute;
+        width: 220px;
+        border-radius: 15px;
+        opacity: 0;
+        transform: scale(0.5) rotate(0deg);
+        transition: all 1.5s ease;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      }
+
+      .album-item.show {
+        opacity: 1;
+        transform: scale(1) rotate(var(--rotate));
+      }
+
+      /* foto */
+      .album-item img,
+      .album-item video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 15px;
+      }
+    </style>
+  </head>
+
+  <body onclick="spawnHeart(event)">
+    <!-- 🎁 GIFT -->
+    <div id="giftScreen">
+      <div class="gift-box" onclick="openGift(event)">
+        <div class="lid"></div>
+        <div class="box"></div>
+      </div>
+    </div>
+
+    <button
+      onclick="testAlbum()"
+      style="
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 9999;
+        padding: 10px 20px;
+      "
+    >
+      TEST ALBUM
+    </button>
+
+    <canvas id="stars"></canvas>
+    <div id="cinematicOverlay"></div>
+    <div id="tulip-container"></div>
+
+    <!-- AUDIO -->
+    <audio id="music" src="music.mp3"></audio>
+    <audio id="voice" src="voice.mp3"></audio>
+
+    <div class="container">
+      <h1 id="text"></h1>
+      <div id="choices"></div>
+      <div id="photoAlbum"></div>
+    </div>
+
+    <script>
+      function openGift(e) {
+        const overlay = document.getElementById("cinematicOverlay");
+        e.stopPropagation();
+
+        const box = document.querySelector(".gift-box");
+        const giftScreen = document.getElementById("giftScreen");
+
+        box.classList.add("open");
+
+        // 🌷 bunga kecil dulu
+        for (let i = 0; i < 15; i++) {
+          const f = document.createElement("div");
+          f.className = "flower";
+          f.innerHTML = "🌷";
+          f.style.left =
+            window.innerWidth / 2 + (Math.random() * 120 - 60) + "px";
+          f.style.top = window.innerHeight / 2 + "px";
+          document.body.appendChild(f);
+          setTimeout(() => f.remove(), 2000);
+        }
+
+        // 🎬 DELAY dikit baru explosion (biar dramatis)
+        setTimeout(() => {
+          tulipExplosion();
+        }, 500);
+
+        const music = document.getElementById("music");
+        const voice = document.getElementById("voice");
+
+        music.volume = 0;
+        music.play().then(() => {
+          voice.play();
+
+          let v = 0;
+          const fade = setInterval(() => {
+            if (v < 0.5) {
+              v += 0.02;
+              music.volume = v;
+            } else clearInterval(fade);
+          }, 200);
+        });
+
+        // 🌷 explosion dulu
+        setTimeout(() => {
+          tulipExplosion();
+        }, 500);
+
+        // 🌫️ masuk cinematic overlay (blur + dark)
+        setTimeout(() => {
+          overlay.style.opacity = "1";
+        }, 1200);
+
+        // 🎁 fade gift
+        setTimeout(() => {
+          giftScreen.style.opacity = "0";
+        }, 1500);
+
+        // 🎬 mulai cinematic pelan
+        setTimeout(() => {
+          giftScreen.style.display = "none";
+          startCinematic();
+        }, 2800);
+
+        setTimeout(() => {
+          canvas.style.transition = "filter 1.5s ease";
+          canvas.style.filter = "blur(2px)";
+        }, 1200);
+      }
+      let audioCtx;
+
+      const typingSound = new Audio("typing.mp3");
+      typingSound.loop = true;
+      typingSound.volume = 0.25;
+      /* 🎬 TYPE */
+      function typeText(text, speed = 40) {
+        return new Promise((resolve) => {
+          const el = document.getElementById("text");
+
+          el.classList.remove("show");
+          el.innerHTML = "";
+
+          setTimeout(() => {
+            el.classList.add("show");
+          }, 50);
+
+          // 🔊 START typing ambience
+          typingSound.currentTime = 0;
+          typingSound.play().catch(() => {});
+
+          let i = 0;
+
+          function t() {
+            if (i < text.length) {
+              el.innerHTML += text[i];
+              i++;
+              setTimeout(t, speed);
+            } else {
+              // 🔇 STOP pelan (fade out biar smooth)
+              let vol = typingSound.volume;
+              const fade = setInterval(() => {
+                if (vol > 0.05) {
+                  vol -= 0.02;
+                  typingSound.volume = vol;
+                } else {
+                  clearInterval(fade);
+                  typingSound.pause();
+                  typingSound.currentTime = 0;
+                  typingSound.volume = 0.25; // reset
+                }
+              }, 50);
+
+              resolve();
+            }
+          }
+
+          t();
+        });
+      }
+
+      function wait(ms) {
+        return new Promise((r) => setTimeout(r, ms));
+      }
+
+      /* 🎬 MAIN STORY */
+      async function startCinematic() {
+        const choices = document.getElementById("choices");
+        choices.innerHTML = "";
+
+        // 🎬 SCENE 0 — OPENING
+        await typeText("Please... listen until the end");
+        await wait(3000);
+        await typeText("This is about you");
+        await wait(3500);
+
+        // 🎬 SCENE 1 — INTRO
+        await typeText("Hey you...");
+        await wait(2500);
+        await typeText("Ayong ❤️");
+        await wait(2500);
+        await typeText("The name only I call you");
+        await wait(3500);
+
+        // 🎬 SCENE 2 — BIRTHDAY
+        await typeText("Today is not just an ordinary day...");
+        await wait(3000);
+        await typeText("Today is the day someone very special was born");
+        await wait(3500);
+        await typeText("April 27");
+        await wait(2500);
+        await typeText("And today... you turn 21");
+        await wait(4000);
+
+        // 🎬 SCENE 3 — WISHES
+        await typeText("Happy Birthday, Ayong");
+        await wait(3500);
+        await typeText("I hope in this new chapter of your life...");
+        await wait(3000);
+        await typeText("All the good things slowly come to you");
+        await wait(3500);
+        await typeText("All your dreams come true, one by one");
+        await wait(3500);
+        await typeText("And everything that makes you sad...");
+        await wait(3000);
+        await typeText("slowly fades away 💭");
+        await wait(4000);
+
+        // 🎬 SCENE 4 — FEELINGS
+        await typeText("I may not be perfect...");
+        await wait(3000);
+        await typeText("But I'm really grateful I met you");
+        await wait(3000);
+        await typeText("That I got close to you");
+        await wait(3000);
+        await typeText("And became a small part of your life");
+        await wait(4000);
+
+        // 🎬 SCENE 5 — DESTINATION (AUTO, NO CHOICE)
+        await typeText("If today we go out together...");
+        await wait(3000);
+        await typeText("I already know where we should go");
+        await wait(3000);
+        await typeText("Somewhere simple...");
+        await wait(2500);
+        await typeText("But full of little stories");
+        await wait(3500);
+
+        await typeText("We'll walk through Ubud...");
+        await wait(3000);
+        await typeText("Along Jalan Goutama");
+        await wait(3500);
+
+        await typeText("A place full of small food spots...");
+        await wait(3000);
+        await typeText("Street food, warm lights, and cozy vibes");
+        await wait(3500);
+
+        await typeText("We’ll just walk...");
+        await wait(2500);
+        await typeText("Try random food...");
+        await wait(2500);
+        await typeText("Laugh at small things...");
+        await wait(3000);
+
+        // lanjut ke emotional part
+        continueStory();
+      }
+
+      async function continueStory() {
+        // 🎬 SCENE 6 — EMOTIONAL
+        await typeText("Ayong...");
+        await wait(2500);
+        await typeText("Thank you");
+        await wait(3000);
+        await typeText("For being in my life");
+        await wait(3000);
+        await typeText("And being the reason I smile every day 💌");
+        await wait(4000);
+
+        // 🎬 SCENE 7 — LOVE
+        await typeText("I may not always say this...");
+        await wait(3000);
+        await typeText("But I truly care about you");
+        await wait(3500);
+        await typeText("And I will always choose you...");
+        await wait(3000);
+        await typeText("again and again and again");
+        await wait(4000);
+
+        // 🎬 SCENE 8 — FINAL
+        await typeText("Once again...");
+        await wait(2500);
+        await typeText("Happy Birthday, Ayong");
+        await wait(3500);
+        await typeText("I hope you're always happy");
+        await wait(3000);
+        await typeText("Always healthy");
+        await wait(3000);
+        await typeText("And always surrounded by good things");
+        await wait(3500);
+
+        // 🎬 SCENE 9 — DEEP LINE
+        await typeText("Because for me...");
+        await wait(3000);
+        await typeText("You're not just special");
+        await wait(3000);
+        await typeText("You are home");
+        await wait(4000);
+
+        await wait(6000);
+
+        await typeText("I love you...");
+        await wait(2500);
+        await typeText("more than words can explain 💖");
+
+        await wait(3000);
+
+        document.getElementById("text").innerHTML = "";
+
+        // 🎧 voice masuk
+        const voice = document.getElementById("voice");
+        voice.play();
+
+        // 🎬 lanjut album
+        showPhotoAlbum();
+      }
+
+      function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [array[i], array[j]] = [array[j], array[i]];
+        }
+      }
+      function showPhotoAlbum() {
+        const album = document.getElementById("photoAlbum");
+        album.innerHTML = ""; // reset biar gak numpuk
+
+        const items = [
+          { type: "img", src: "photo1.jpeg" },
+          { type: "img", src: "photo2.jpeg" },
+          { type: "img", src: "photo3.jpeg" },
+          { type: "img", src: "photo4.jpeg" },
+          { type: "video", src: "video2.mp4" },
+          { type: "video", src: "video1.mp4" },
+          { type: "video", src: "video7.mp4" },
+          { type: "video", src: "video5.mp4" },
+          { type: "img", src: "photo7.jpeg" },
+          { type: "video", src: "video3.mp4" },
+          { type: "video", src: "video4.mp4" },
+          { type: "video", src: "video6.mp4" },
+        ];
+
+        // 🔀 split + shuffle
+        const images = items.filter((i) => i.type === "img");
+        const videos = items.filter((i) => i.type === "video");
+
+        shuffleArray(images);
+        shuffleArray(videos);
+
+        // 🔥 interleave (foto-video-foto-video)
+        const mixedItems = [];
+        const maxLength = Math.max(images.length, videos.length);
+
+        for (let i = 0; i < maxLength; i++) {
+          if (images[i]) mixedItems.push(images[i]);
+          if (videos[i]) mixedItems.push(videos[i]);
+        }
+
+        // 🔥 layout
+        const marginX = 120;
+        const marginY = 100;
+
+        const usableWidth = window.innerWidth - marginX * 2;
+        const usableHeight = window.innerHeight - marginY * 2;
+
+        const cols = 6;
+        const rows = Math.ceil(mixedItems.length / cols);
+
+        const cellW = usableWidth / cols;
+        const cellH = usableHeight / rows;
+
+        mixedItems.forEach((item, i) => {
+          const wrapper = document.createElement("div");
+          wrapper.className = "album-item";
+
+          const col = i % cols;
+          const row = Math.floor(i / cols);
+
+          // 🔥 DEPTH EFFECT (atas kecil, bawah besar)
+          let depthScale = 1;
+          if (row === 0) depthScale = 0.75;
+          else if (row === rows - 1) depthScale = 1.15;
+          else depthScale = 0.95;
+
+          const randomScale = 0.9 + Math.random() * 0.2;
+
+          const w = cellW * depthScale * randomScale;
+          const h = cellH * depthScale * randomScale;
+
+          // 🔥 CENTER DALAM CELL
+          let x = marginX + col * cellW + (cellW - w) / 2;
+          let y = marginY + row * cellH + (cellH - h) / 2;
+
+          // 🔥 center baris terakhir kalau gak penuh
+          if (row === rows - 1) {
+            const itemsInLastRow = mixedItems.length % cols || cols;
+            const emptySpace = (cols - itemsInLastRow) * cellW;
+            x += emptySpace / 2;
+          }
+
+          // 🔥 RANDOM OFFSET (natural feel)
+          x += (Math.random() - 0.5) * 40;
+          y += (Math.random() - 0.5) * 30;
+
+          wrapper.style.left = x + "px";
+          wrapper.style.top = y + "px";
+          wrapper.style.width = w + "px";
+          wrapper.style.height = h + "px";
+
+          // 🔥 ROTATION
+          const rotate = Math.random() * 10 - 5;
+          wrapper.style.setProperty("--rotate", rotate + "deg");
+
+          // 🔥 DEPTH Z-INDEX
+          wrapper.style.zIndex = 10 + row;
+
+          // 🔥 FLOATING SPEED BERBEDA (parallax)
+          const duration = 5 + Math.random() * 4;
+
+          // baris atas lebih lambat (jauh), bawah lebih cepat (dekat)
+          const speedFactor = 1 + row * 0.5;
+
+          wrapper.style.animationDuration = duration / speedFactor + "s";
+          wrapper.classList.add("floating");
+
+          // 🔥 ELEMENT
+          let el;
+          if (item.type === "video") {
+            el = document.createElement("video");
+            el.src = item.src;
+            el.autoplay = true;
+            el.loop = true;
+            el.muted = true;
+
+            wrapper.style.boxShadow = "0 0 25px rgba(255,102,204,0.5)";
+          } else {
+            el = document.createElement("img");
+            el.src = item.src;
+          }
+
+          wrapper.appendChild(el);
+          album.appendChild(wrapper);
+
+          // 🔥 ANIMATION DELAY (cinematic masuk satu-satu)
+          setTimeout(() => {
+            wrapper.classList.add("show");
+          }, i * 250);
+        });
+
+        document.body.style.background = "rgba(0,0,0,0.85)";
+
+        // 🔥 vignette cinematic
+        let vignette = document.getElementById("vignette");
+
+        if (!vignette) {
+          vignette = document.createElement("div");
+          vignette.id = "vignette";
+          document.body.appendChild(vignette);
+        }
+
+        let leak = document.getElementById("lightLeak");
+
+        if (!leak) {
+          leak = document.createElement("div");
+          leak.id = "lightLeak";
+          document.body.appendChild(leak);
+        }
+
+        let grain = document.getElementById("grain");
+
+        if (!grain) {
+          grain = document.createElement("div");
+          grain.id = "grain";
+          document.body.appendChild(grain);
+        }
+
+        setTimeout(
+          () => {
+            showCinemaEnding();
+          },
+          mixedItems.length * 250 + 8000,
+        );
+      }
+      function testAlbum() {
+        // hapus text biar bersih
+        const text = document.getElementById("text");
+        if (text) text.innerHTML = "";
+
+        // tampilkan album
+        showPhotoAlbum();
+      }
+
+    function showCinemaEnding() {
+  // 🎧 fade music pelan
+  const music = document.getElementById("music");
+  if (music) {
+    let vol = music.volume;
+    const fade = setInterval(() => {
+      if (vol > 0.05) {
+        vol -= 0.02;
+        music.volume = vol;
+      } else {
+        clearInterval(fade);
+      }
+    }, 200);
+  }
+
+  // 🔊 typing sound (LOOP, bukan per huruf)
+  const typingSound = new Audio("typing.mp3");
+  typingSound.volume = 0.4;
+
+  // 🌑 OVERLAY CINEMATIC
+  const overlay = document.createElement("div");
+  overlay.style.position = "fixed";
+  overlay.style.top = "0";
+  overlay.style.left = "0";
+  overlay.style.width = "100%";
+  overlay.style.height = "100%";
+
+  overlay.style.background =
+    "radial-gradient(circle at center, #000 40%, #000 100%)";
+
+  overlay.style.zIndex = "9999";
+  overlay.style.opacity = "0";
+  overlay.style.transition = "opacity 3s ease";
+
+  document.body.appendChild(overlay);
+
+  setTimeout(() => {
+    overlay.style.opacity = "1";
+
+    // 🔥 slow zoom cinematic
+    overlay.animate(
+      [{ transform: "scale(1)" }, { transform: "scale(1.05)" }],
+      {
+        duration: 8000,
+        fill: "forwards",
+        easing: "ease-out",
+      }
+    );
+  }, 100);
+
+  // 🎬 TEXT STYLE
+  const createText = (top, size, opacity = 0.9) => {
+    const el = document.createElement("div");
+    el.style.position = "absolute";
+    el.style.top = top;
+    el.style.left = "50%";
+    el.style.transform = "translate(-50%, -50%)";
+    el.style.color = "white";
+    el.style.fontSize = size;
+    el.style.textAlign = "center";
+    el.style.fontFamily = "Poppins, sans-serif";
+    el.style.opacity = opacity;
+    overlay.appendChild(el);
+    return el;
+  };
+
+  const textTop = createText("40%", "26px", 0.7);
+  const textMid = createText("50%", "28px", 0.85);
+  const textMain = createText("60%", "48px", 1);
+
+  // 🔥 TYPEWRITER FIX (LOOP SOUND + FADE OUT)
+  function typeWriter(el, text, speed = 60) {
+    return new Promise((resolve) => {
+      el.innerHTML = "";
+      let i = 0;
+
+      const cursor = document.createElement("span");
+      cursor.innerHTML = "|";
+      cursor.style.marginLeft = "5px";
+      cursor.style.animation = "blink 1s infinite";
+      el.appendChild(cursor);
+
+      // 🔊 START sound sekali aja
+      typingSound.loop = true;
+      typingSound.currentTime = 0;
+      typingSound.play().catch(() => {});
+
+      function typing() {
+        if (i < text.length) {
+          cursor.insertAdjacentText("beforebegin", text.charAt(i));
+          i++;
+          setTimeout(typing, speed);
+        } else {
+          // 🔇 fade out smooth
+          let vol = typingSound.volume;
+
+          const fade = setInterval(() => {
+            if (vol > 0.05) {
+              vol -= 0.02;
+              typingSound.volume = vol;
+            } else {
+              clearInterval(fade);
+              typingSound.pause();
+              typingSound.currentTime = 0;
+              typingSound.volume = 0.4;
+            }
+          }, 60);
+
+          resolve();
+        }
+      }
+
+      typing();
+    });
+  }
+
+  // cursor blink
+  const style = document.createElement("style");
+  style.innerHTML = `
+    @keyframes blink {
+      0%,50%,100% { opacity: 1; }
+      25%,75% { opacity: 0; }
+    }
+  `;
+  document.head.appendChild(style);
+
+  // 🎬 FLOW CINEMATIC
+  setTimeout(async () => {
+    await typeWriter(textTop, "A moment you'll remember...", 50);
+
+    await new Promise((r) => setTimeout(r, 1500));
+
+    await typeWriter(textMid, "Not the end... just the beginning", 55);
+
+    await new Promise((r) => setTimeout(r, 2000));
+
+    // 🔥 FINAL LINE (lebih pelan & lebih feel)
+    typingSound.volume = 0.25;
+    await typeWriter(
+      textMain,
+      "See you on Saturday, May 2, 2026 ❤️",
+      70
+    );
+
+    // ✨ glow effect final
+    textMain.style.textShadow = "0 0 25px rgba(255,255,255,0.9)";
+
+    // ❗ STOP (freeze scene, no exit = cinematic ending)
+  }, 2500);
+}
+      /* 🌌 STAR */
+      const canvas = document.getElementById("stars");
+      const ctx = canvas.getContext("2d");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      canvas.style.filter = "blur(2px)";
+
+      let stars = Array.from({ length: 100 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 2,
+      }));
+
+      function drawStars() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "white";
+        stars.forEach((s) => {
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fill();
+          s.y += 0.2;
+          if (s.y > canvas.height) s.y = 0;
+        });
+        requestAnimationFrame(drawStars);
+      }
+      drawStars();
+
+      function createTulips() {
+        const container = document.getElementById("tulip-container");
+
+        setInterval(() => {
+          const t = document.createElement("div");
+          t.innerHTML = "🌷";
+          t.className = "tulip front";
+
+          t.style.left = Math.random() * window.innerWidth + "px";
+          t.style.fontSize = Math.random() * 20 + 20 + "px";
+
+          container.appendChild(t);
+          setTimeout(() => t.remove(), 10000);
+        }, 250);
+      }
+
+      createTulips();
+
+      function tulipExplosion() {
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
+
+        for (let i = 0; i < 40; i++) {
+          // 🔥 jumlah tulip
+          const t = document.createElement("div");
+          t.className = "tulip-explode";
+          t.innerHTML = "🌷";
+
+          // posisi awal di tengah
+          t.style.left = centerX + "px";
+          t.style.top = centerY + "px";
+
+          // arah random (meledak ke segala arah)
+          const angle = Math.random() * 2 * Math.PI;
+          const distance = Math.random() * 300 + 100;
+
+          const x = Math.cos(angle) * distance;
+          const y = Math.sin(angle) * distance;
+
+          t.style.setProperty("--x", x + "px");
+          t.style.setProperty("--y", y + "px");
+
+          document.body.appendChild(t);
+
+          setTimeout(() => t.remove(), 1800);
+        }
+      }
+
+      /* 💖 HEART */
+      function spawnHeart(e) {
+        const h = document.createElement("div");
+        h.className = "heart";
+        h.innerHTML = "💖";
+        h.style.left = e.clientX + "px";
+        h.style.top = e.clientY + "px";
+        document.body.appendChild(h);
+        setTimeout(() => h.remove(), 3000);
+      }
+    </script>
+  </body>
+</html>
