@@ -429,25 +429,12 @@
       </div>
     </div>
 
-    <button
-      onclick="testAlbum()"
-      style="
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        z-index: 9999;
-        padding: 10px 20px;
-      "
-    >
-      TEST ALBUM
-    </button>
-
     <canvas id="stars"></canvas>
     <div id="cinematicOverlay"></div>
     <div id="tulip-container"></div>
 
     <!-- AUDIO -->
-    <audio id="music" src="music.mp3"></audio>
+    <audio id="music" src="music1.mp3"></audio>
     <audio id="voice" src="voice.mp3"></audio>
 
     <div class="container">
@@ -486,16 +473,21 @@
         const music = document.getElementById("music");
         const voice = document.getElementById("voice");
 
+        // pastikan voice belum jalan
+        voice.pause();
+        voice.currentTime = 0;
+
         music.volume = 0;
         music.play().then(() => {
-          voice.play();
-
           let v = 0;
+
           const fade = setInterval(() => {
             if (v < 0.5) {
               v += 0.02;
               music.volume = v;
-            } else clearInterval(fade);
+            } else {
+              clearInterval(fade);
+            }
           }, 200);
         });
 
@@ -592,72 +584,76 @@
         await wait(3500);
 
         // 🎬 SCENE 1 — INTRO
-        await typeText("Hey you...");
+        await typeText("Haiiiii...");
         await wait(2500);
         await typeText("Ayong ❤️");
         await wait(2500);
-        await typeText("The name only I call you");
+        await typeText("Nama yang cuma aku doang yang panggil");
         await wait(3500);
 
         // 🎬 SCENE 2 — BIRTHDAY
-        await typeText("Today is not just an ordinary day...");
+        await typeText("Hari ini adalah bukan hari yang biasa");
         await wait(3000);
-        await typeText("Today is the day someone very special was born");
+        await typeText(
+          "Hari ini adalah hari dimana seseorang yang sangat spesial lahir keduniaa",
+        );
         await wait(3500);
         await typeText("April 27");
         await wait(2500);
-        await typeText("And today... you turn 21");
+        await typeText("Dan hari ini... kamu berumur 21 tahun");
         await wait(4000);
 
         // 🎬 SCENE 3 — WISHES
         await typeText("Happy Birthday, Ayong");
         await wait(3500);
-        await typeText("I hope in this new chapter of your life...");
+        await typeText("Aku berharap di chapter hidupmu yang baru ini... ");
         await wait(3000);
-        await typeText("All the good things slowly come to you");
+        await typeText("Semua hal baik akan perlahan datang ke kamu yaa");
         await wait(3500);
-        await typeText("All your dreams come true, one by one");
+        await typeText("Semua impian yang kamu pingin, terwujud satu per satu");
         await wait(3500);
-        await typeText("And everything that makes you sad...");
+        await typeText("Dan semua hal yang membuatmu sedih");
         await wait(3000);
-        await typeText("slowly fades away 💭");
+        await typeText("Bisa perlahan hilang dan terselesaikan");
         await wait(4000);
 
         // 🎬 SCENE 4 — FEELINGS
-        await typeText("I may not be perfect...");
+        await typeText("Aku memang tidak perfect...");
         await wait(3000);
-        await typeText("But I'm really grateful I met you");
+        await typeText("Tapi aku bersukur banget bisa bertemu sama kamu");
         await wait(3000);
-        await typeText("That I got close to you");
+        await typeText("Bisa deket sama kamu");
         await wait(3000);
-        await typeText("And became a small part of your life");
+        await typeText("Dan bisa menjadi bagian kecil dari hidupmu");
         await wait(4000);
 
         // 🎬 SCENE 5 — DESTINATION (AUTO, NO CHOICE)
-        await typeText("If today we go out together...");
+        await typeText("Dan nanti ketika kita akan keluar sabtu...");
         await wait(3000);
-        await typeText("I already know where we should go");
+        await typeText("Aku sudah tau mau kemana ");
         await wait(3000);
         await typeText("Somewhere simple...");
         await wait(2500);
-        await typeText("But full of little stories");
+        await typeText("Tapi akan penuh dengan cerita kecil");
         await wait(3500);
 
-        await typeText("We'll walk through Ubud...");
+        await typeText("Kita akan pergi ke ubud...");
         await wait(3000);
-        await typeText("Along Jalan Goutama");
+        await typeText("Untuk jalan jalan di sepanjang jalan goutama");
         await wait(3500);
 
-        await typeText("A place full of small food spots...");
+        await typeText("Tempat yang penuh dengan banyak makanan");
         await wait(3000);
         await typeText("Street food, warm lights, and cozy vibes");
         await wait(3500);
 
-        await typeText("We’ll just walk...");
+        await typeText("Kita disana akan jalan ");
         await wait(2500);
-        await typeText("Try random food...");
+        await typeText(
+          "Mencoba makanan random yang aku juga gatau karena gapernah kesitu...",
+        );
         await wait(2500);
-        await typeText("Laugh at small things...");
+        await typeText("Dan ketawa karena hal hal kecil...");
         await wait(3000);
 
         // lanjut ke emotional part
@@ -668,21 +664,21 @@
         // 🎬 SCENE 6 — EMOTIONAL
         await typeText("Ayong...");
         await wait(2500);
-        await typeText("Thank you");
+        await typeText("Terimakasihhhh");
         await wait(3000);
-        await typeText("For being in my life");
+        await typeText("Karena sudah hadir dihidupku ");
         await wait(3000);
-        await typeText("And being the reason I smile every day 💌");
+        await typeText("Dan menjadi semangat untuk menjalani hari hariku");
         await wait(4000);
 
         // 🎬 SCENE 7 — LOVE
-        await typeText("I may not always say this...");
+        await typeText("Aku mungkin ga selalu bilang gini...");
         await wait(3000);
-        await typeText("But I truly care about you");
+        await typeText("Tapi aku bener bener peduli banget ama kamu");
         await wait(3500);
-        await typeText("And I will always choose you...");
+        await typeText("Dan aku akan selalu milih kamu...");
         await wait(3000);
-        await typeText("again and again and again");
+        await typeText("lagi, lagi, dan lagi");
         await wait(4000);
 
         // 🎬 SCENE 8 — FINAL
@@ -698,29 +694,69 @@
         await wait(3500);
 
         // 🎬 SCENE 9 — DEEP LINE
-        await typeText("Because for me...");
+        await typeText("Karena buatku ...");
         await wait(3000);
-        await typeText("You're not just special");
+        await typeText("Kamu bukan cuma orang yang spesial");
         await wait(3000);
-        await typeText("You are home");
+        await typeText("Tapi kamu adalah rumah untuku");
         await wait(4000);
 
         await wait(6000);
 
         await typeText("I love you...");
         await wait(2500);
-        await typeText("more than words can explain 💖");
+        await typeText("More than words can explain");
 
         await wait(3000);
 
         document.getElementById("text").innerHTML = "";
 
-        // 🎧 voice masuk
         const voice = document.getElementById("voice");
-        voice.play();
 
-        // 🎬 lanjut album
+        // reset dulu kalau pernah diputar
+        voice.pause();
+        voice.currentTime = 0;
+
+        // album muncul 2 detik sebelum voice
         showPhotoAlbum();
+
+        // tunggu 2 detik baru voice mulai
+        setTimeout(() => {
+          const music = document.getElementById("music");
+
+          // fade down music biar voice jelas
+          let currentVol = music.volume;
+
+          const lowerMusic = setInterval(() => {
+            if (currentVol > 0.15) {
+              currentVol -= 0.03;
+              music.volume = currentVol;
+            } else {
+              clearInterval(lowerMusic);
+            }
+          }, 200);
+
+          voice.play().catch((err) => console.log(err));
+        }, 2000);
+
+        voice.onended = () => {
+          const music = document.getElementById("music");
+
+          let currentVol = music.volume;
+
+          const raiseMusic = setInterval(() => {
+            if (currentVol < 0.4) {
+              currentVol += 0.02;
+              music.volume = currentVol;
+            } else {
+              clearInterval(raiseMusic);
+            }
+          }, 200);
+
+          setTimeout(() => {
+            showCinemaEnding();
+          }, 2000);
+        };
       }
 
       function shuffleArray(array) {
@@ -881,173 +917,157 @@
           grain.id = "grain";
           document.body.appendChild(grain);
         }
-
-        setTimeout(
-          () => {
-            showCinemaEnding();
-          },
-          mixedItems.length * 250 + 8000,
-        );
-      }
-      function testAlbum() {
-        // hapus text biar bersih
-        const text = document.getElementById("text");
-        if (text) text.innerHTML = "";
-
-        // tampilkan album
-        showPhotoAlbum();
       }
 
-    function showCinemaEnding() {
-  // 🎧 fade music pelan
-  const music = document.getElementById("music");
-  if (music) {
-    let vol = music.volume;
-    const fade = setInterval(() => {
-      if (vol > 0.05) {
-        vol -= 0.02;
-        music.volume = vol;
-      } else {
-        clearInterval(fade);
-      }
-    }, 200);
-  }
-
-  // 🔊 typing sound (LOOP, bukan per huruf)
-  const typingSound = new Audio("typing.mp3");
-  typingSound.volume = 0.4;
-
-  // 🌑 OVERLAY CINEMATIC
-  const overlay = document.createElement("div");
-  overlay.style.position = "fixed";
-  overlay.style.top = "0";
-  overlay.style.left = "0";
-  overlay.style.width = "100%";
-  overlay.style.height = "100%";
-
-  overlay.style.background =
-    "radial-gradient(circle at center, #000 40%, #000 100%)";
-
-  overlay.style.zIndex = "9999";
-  overlay.style.opacity = "0";
-  overlay.style.transition = "opacity 3s ease";
-
-  document.body.appendChild(overlay);
-
-  setTimeout(() => {
-    overlay.style.opacity = "1";
-
-    // 🔥 slow zoom cinematic
-    overlay.animate(
-      [{ transform: "scale(1)" }, { transform: "scale(1.05)" }],
-      {
-        duration: 8000,
-        fill: "forwards",
-        easing: "ease-out",
-      }
-    );
-  }, 100);
-
-  // 🎬 TEXT STYLE
-  const createText = (top, size, opacity = 0.9) => {
-    const el = document.createElement("div");
-    el.style.position = "absolute";
-    el.style.top = top;
-    el.style.left = "50%";
-    el.style.transform = "translate(-50%, -50%)";
-    el.style.color = "white";
-    el.style.fontSize = size;
-    el.style.textAlign = "center";
-    el.style.fontFamily = "Poppins, sans-serif";
-    el.style.opacity = opacity;
-    overlay.appendChild(el);
-    return el;
-  };
-
-  const textTop = createText("40%", "26px", 0.7);
-  const textMid = createText("50%", "28px", 0.85);
-  const textMain = createText("60%", "48px", 1);
-
-  // 🔥 TYPEWRITER FIX (LOOP SOUND + FADE OUT)
-  function typeWriter(el, text, speed = 60) {
-    return new Promise((resolve) => {
-      el.innerHTML = "";
-      let i = 0;
-
-      const cursor = document.createElement("span");
-      cursor.innerHTML = "|";
-      cursor.style.marginLeft = "5px";
-      cursor.style.animation = "blink 1s infinite";
-      el.appendChild(cursor);
-
-      // 🔊 START sound sekali aja
-      typingSound.loop = true;
-      typingSound.currentTime = 0;
-      typingSound.play().catch(() => {});
-
-      function typing() {
-        if (i < text.length) {
-          cursor.insertAdjacentText("beforebegin", text.charAt(i));
-          i++;
-          setTimeout(typing, speed);
-        } else {
-          // 🔇 fade out smooth
-          let vol = typingSound.volume;
-
+      function showCinemaEnding() {
+        // 🎧 fade music pelan
+        const music = document.getElementById("music");
+        if (music) {
+          let vol = music.volume;
           const fade = setInterval(() => {
             if (vol > 0.05) {
               vol -= 0.02;
-              typingSound.volume = vol;
+              music.volume = vol;
             } else {
               clearInterval(fade);
-              typingSound.pause();
-              typingSound.currentTime = 0;
-              typingSound.volume = 0.4;
             }
-          }, 60);
-
-          resolve();
+          }, 200);
         }
-      }
 
-      typing();
-    });
-  }
+        // 🔊 typing sound (LOOP, bukan per huruf)
+        const typingSound = new Audio("typing.mp3");
+        typingSound.volume = 0.4;
 
-  // cursor blink
-  const style = document.createElement("style");
-  style.innerHTML = `
+        // 🌑 OVERLAY CINEMATIC
+        const overlay = document.createElement("div");
+        overlay.style.position = "fixed";
+        overlay.style.top = "0";
+        overlay.style.left = "0";
+        overlay.style.width = "100%";
+        overlay.style.height = "100%";
+
+        overlay.style.background =
+          "radial-gradient(circle at center, #000 40%, #000 100%)";
+
+        overlay.style.zIndex = "9999";
+        overlay.style.opacity = "0";
+        overlay.style.transition = "opacity 3s ease";
+
+        document.body.appendChild(overlay);
+
+        setTimeout(() => {
+          overlay.style.opacity = "1";
+
+          // 🔥 slow zoom cinematic
+          overlay.animate(
+            [{ transform: "scale(1)" }, { transform: "scale(1.05)" }],
+            {
+              duration: 8000,
+              fill: "forwards",
+              easing: "ease-out",
+            },
+          );
+        }, 100);
+
+        // 🎬 TEXT STYLE
+        const createText = (top, size, opacity = 0.9) => {
+          const el = document.createElement("div");
+          el.style.position = "absolute";
+          el.style.top = top;
+          el.style.left = "50%";
+          el.style.transform = "translate(-50%, -50%)";
+          el.style.color = "white";
+          el.style.fontSize = size;
+          el.style.textAlign = "center";
+          el.style.fontFamily = "Poppins, sans-serif";
+          el.style.opacity = opacity;
+          overlay.appendChild(el);
+          return el;
+        };
+
+        const textTop = createText("40%", "26px", 0.7);
+        const textMid = createText("50%", "28px", 0.85);
+        const textMain = createText("60%", "48px", 1);
+
+        // 🔥 TYPEWRITER FIX (LOOP SOUND + FADE OUT)
+        function typeWriter(el, text, speed = 60) {
+          return new Promise((resolve) => {
+            el.innerHTML = "";
+            let i = 0;
+
+            const cursor = document.createElement("span");
+            cursor.innerHTML = "|";
+            cursor.style.marginLeft = "5px";
+            cursor.style.animation = "blink 1s infinite";
+            el.appendChild(cursor);
+
+            // 🔊 START sound sekali aja
+            typingSound.loop = true;
+            typingSound.currentTime = 0;
+            typingSound.play().catch(() => {});
+
+            function typing() {
+              if (i < text.length) {
+                cursor.insertAdjacentText("beforebegin", text.charAt(i));
+                i++;
+                setTimeout(typing, speed);
+              } else {
+                // 🔇 fade out smooth
+                let vol = typingSound.volume;
+
+                const fade = setInterval(() => {
+                  if (vol > 0.05) {
+                    vol -= 0.02;
+                    typingSound.volume = vol;
+                  } else {
+                    clearInterval(fade);
+                    typingSound.pause();
+                    typingSound.currentTime = 0;
+                    typingSound.volume = 0.4;
+                  }
+                }, 60);
+
+                resolve();
+              }
+            }
+
+            typing();
+          });
+        }
+
+        // cursor blink
+        const style = document.createElement("style");
+        style.innerHTML = `
     @keyframes blink {
       0%,50%,100% { opacity: 1; }
       25%,75% { opacity: 0; }
     }
   `;
-  document.head.appendChild(style);
+        document.head.appendChild(style);
 
-  // 🎬 FLOW CINEMATIC
-  setTimeout(async () => {
-    await typeWriter(textTop, "A moment you'll remember...", 50);
+        // 🎬 FLOW CINEMATIC
+        setTimeout(async () => {
+          await typeWriter(textTop, "A moment you'll remember...", 50);
 
-    await new Promise((r) => setTimeout(r, 1500));
+          await new Promise((r) => setTimeout(r, 1500));
 
-    await typeWriter(textMid, "Not the end... just the beginning", 55);
+          await typeWriter(textMid, "Not the end... just the beginning", 55);
 
-    await new Promise((r) => setTimeout(r, 2000));
+          await new Promise((r) => setTimeout(r, 2000));
 
-    // 🔥 FINAL LINE (lebih pelan & lebih feel)
-    typingSound.volume = 0.25;
-    await typeWriter(
-      textMain,
-      "See you on Saturday, May 2, 2026 ❤️",
-      70
-    );
+          // 🔥 FINAL LINE (lebih pelan & lebih feel)
+          typingSound.volume = 0.25;
+          await typeWriter(textMain, "See you on Saturday, May 2, 2026 ❤️", 70);
 
-    // ✨ glow effect final
-    textMain.style.textShadow = "0 0 25px rgba(255,255,255,0.9)";
+          // ✨ glow effect final
+          textMain.style.textShadow = "0 0 25px rgba(255,255,255,0.9)";
 
-    // ❗ STOP (freeze scene, no exit = cinematic ending)
-  }, 2500);
-}
+          // tunggu bentar biar final line dinikmati
+          setTimeout(() => {
+            showGiftGame(overlay);
+          }, 5000);
+        }, 2500);
+      }
       /* 🌌 STAR */
       const canvas = document.getElementById("stars");
       const ctx = canvas.getContext("2d");
@@ -1060,6 +1080,192 @@
         y: Math.random() * canvas.height,
         r: Math.random() * 2,
       }));
+
+      function showGiftGame(previousOverlay) {
+        previousOverlay.innerHTML = "";
+
+        const gameOverlay = document.createElement("div");
+        gameOverlay.style.position = "fixed";
+        gameOverlay.style.top = "0";
+        gameOverlay.style.left = "0";
+        gameOverlay.style.width = "100%";
+        gameOverlay.style.height = "100%";
+        gameOverlay.style.background = "black";
+        gameOverlay.style.zIndex = "10000";
+        gameOverlay.style.display = "flex";
+        gameOverlay.style.flexDirection = "column";
+        gameOverlay.style.justifyContent = "center";
+        gameOverlay.style.alignItems = "center";
+
+        document.body.appendChild(gameOverlay);
+
+        const question = document.createElement("h1");
+        question.innerHTML = "Jadi... mau gak odor odor sama acuu? 😚";
+        question.style.color = "white";
+        question.style.fontFamily = "Poppins";
+        question.style.marginBottom = "40px";
+
+        gameOverlay.appendChild(question);
+
+        const btnContainer = document.createElement("div");
+        btnContainer.style.position = "relative";
+        btnContainer.style.width = "500px";
+        btnContainer.style.height = "300px";
+
+        gameOverlay.appendChild(btnContainer);
+
+        // YES BUTTON
+        const yesBtn = document.createElement("button");
+        yesBtn.innerHTML = "YES ❤️";
+        yesBtn.style.padding = "15px 40px";
+        yesBtn.style.fontSize = "20px";
+        yesBtn.style.border = "none";
+        yesBtn.style.borderRadius = "30px";
+        yesBtn.style.background = "#ff4da6";
+        yesBtn.style.color = "white";
+        yesBtn.style.cursor = "pointer";
+        yesBtn.style.marginRight = "20px";
+
+        btnContainer.appendChild(yesBtn);
+
+        // NO BUTTON
+        const noBtn = document.createElement("button");
+        noBtn.innerHTML = "NO 🙈";
+        noBtn.style.position = "absolute";
+        noBtn.style.padding = "15px 40px";
+        noBtn.style.fontSize = "20px";
+        noBtn.style.border = "none";
+        noBtn.style.borderRadius = "30px";
+        noBtn.style.background = "#444";
+        noBtn.style.color = "white";
+        noBtn.style.cursor = "pointer";
+
+        noBtn.style.left = "280px";
+        noBtn.style.top = "100px";
+
+        btnContainer.appendChild(noBtn);
+
+        // NO pindah hanya saat diklik
+        noBtn.addEventListener("click", () => {
+          const maxX = 350;
+          const maxY = 220;
+
+          const randomX = Math.random() * maxX;
+          const randomY = Math.random() * maxY;
+
+          noBtn.style.left = randomX + "px";
+          noBtn.style.top = randomY + "px";
+
+          const messages = [
+            "ih kok no 😭",
+            "masa gamau odor odor sama acuu 🥺",
+            "klik yes dong ❤️",
+            "acuu udah nyiapin semuanya 😤",
+            "jangan nolak acuu 😔",
+            "jangan bawel deh 😤",
+            "udah ga usah nyoba no lagi 😌",
+            "gaakan bisa klik no wkwk",
+            "sana klik yes aja ❤️",
+          ];
+
+          question.innerHTML =
+            messages[Math.floor(Math.random() * messages.length)];
+        });
+
+        // YES CLICK
+        yesBtn.addEventListener("click", async () => {
+          gameOverlay.innerHTML = "";
+
+          const celebrationText = document.createElement("h1");
+          celebrationText.innerHTML = "YAYYYYY ❤️🎉";
+          celebrationText.style.color = "white";
+          celebrationText.style.fontFamily = "Poppins";
+          celebrationText.style.fontSize = "60px";
+          celebrationText.style.textAlign = "center";
+
+          gameOverlay.appendChild(celebrationText);
+
+          // multiple explosion
+          for (let i = 0; i < 6; i++) {
+            setTimeout(() => {
+              tulipExplosion();
+            }, i * 500);
+          }
+
+          // confetti hearts
+          const interval = setInterval(() => {
+            const item = document.createElement("div");
+            item.innerHTML = Math.random() > 0.5 ? "💖" : "🎉";
+
+            item.style.position = "absolute";
+            item.style.left = Math.random() * window.innerWidth + "px";
+            item.style.top = "-50px";
+            item.style.fontSize = Math.random() * 20 + 20 + "px";
+            item.style.animation = "fallDown 4s linear forwards";
+
+            document.body.appendChild(item);
+
+            setTimeout(() => item.remove(), 4000);
+          }, 200);
+
+          // animation fall
+          const style = document.createElement("style");
+          style.innerHTML = `
+      @keyframes fallDown {
+        to {
+          transform: translateY(110vh) rotate(360deg);
+          opacity: 0;
+        }
+      }
+    `;
+          document.head.appendChild(style);
+
+          // tunggu celebration dulu
+          await wait(5000);
+
+          clearInterval(interval);
+
+          gameOverlay.innerHTML = "";
+
+          const finalMsg = document.createElement("div");
+          finalMsg.style.color = "white";
+          finalMsg.style.fontSize = "42px";
+          finalMsg.style.textAlign = "center";
+          finalMsg.style.fontFamily = "Poppins";
+
+          gameOverlay.appendChild(finalMsg);
+
+          await finalType(finalMsg, "Sekarang liat mobile banking muuu ");
+          await wait(2500);
+
+          finalMsg.innerHTML = "";
+
+          await finalType(
+            finalMsg,
+            "Ituuu hadiah yang sebenarnya wkwkwkwk semoga suka yaaa",
+          );
+
+          finalMsg.style.textShadow = "0 0 20px rgba(255,255,255,0.8)";
+        });
+      }
+      function finalType(el, text, speed = 70) {
+        return new Promise((resolve) => {
+          let i = 0;
+          el.innerHTML = "";
+
+          function type() {
+            if (i < text.length) {
+              el.innerHTML += text.charAt(i);
+              i++;
+              setTimeout(type, speed);
+            } else {
+              resolve();
+            }
+          }
+
+          type();
+        });
+      }
 
       function drawStars() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
